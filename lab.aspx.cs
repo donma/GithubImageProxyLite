@@ -18,7 +18,7 @@ namespace GithubImageLite
         }
 
 
-        private string UploadImage(string localpath, string id,string owner, string token = "zxcasdqwe", string url = "https://localhost:44363/upload.aspx")
+        private string UploadImage(string localpath, string id,string owner, string token = "pass", string url = "https://localhost:44363/upload.aspx")
         {
             var src = System.IO.File.ReadAllBytes(localpath);
             Stream stream = new MemoryStream(src);
