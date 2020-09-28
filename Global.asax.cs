@@ -19,7 +19,7 @@ namespace GithubImageLite
 
         public readonly static string ServerToken = "pass";
         public readonly static string ImageNotFound = "https://raw.githubusercontent.com/ctimggit/storage1/master/404.png";
-        public readonly static decimal  PerRepoLimit =400;
+        public readonly static decimal  PerRepoLimit =699;
         public static bool IsWriting { get; set; }
         protected void Application_Start(object sender, EventArgs e)
         {

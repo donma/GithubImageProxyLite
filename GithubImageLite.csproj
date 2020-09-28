@@ -79,6 +79,7 @@
     <Content Include="admin\tokenlist.aspx" />
     <Content Include="Global.asax" />
     <Content Include="image.aspx" />
+    <Content Include="index.html" />
     <Content Include="lab.aspx" />
     <Content Include="lib\Newtonsoft.Json.dll" />
     <Content Include="lib\Newtonsoft.Json.xml" />
