@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="getrepos.aspx.cs" Inherits="GithubImageLite.admin.getrepos" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="getrepos.aspx.cs" Async="true" Inherits="GithubImageLite.admin.getrepos" %>

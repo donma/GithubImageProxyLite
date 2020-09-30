@@ -76,6 +76,7 @@
     <Content Include="admin\imagelist.aspx" />
     <Content Include="admin\create.aspx" />
     <Content Include="admin\getrepos.aspx" />
+    <Content Include="admin\images.aspx" />
     <Content Include="admin\tokenlist.aspx" />
     <Content Include="Global.asax" />
     <Content Include="image.aspx" />
@@ -109,6 +110,13 @@
     </Compile>
     <Compile Include="admin\imagelist.aspx.designer.cs">
       <DependentUpon>imagelist.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\images.aspx.cs">
+      <DependentUpon>images.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\images.aspx.designer.cs">
+      <DependentUpon>images.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\tokenlist.aspx.cs">
       <DependentUpon>tokenlist.aspx</DependentUpon>
@@ -148,6 +156,10 @@
   <ItemGroup>
     <Content Include="lib\No2DB.dll.config" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\gitproxy1 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\gitproxy1 - ReadOnly - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\gitproxy1 - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
