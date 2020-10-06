@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using Newtonsoft.Json;
+using Octokit;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,13 +18,26 @@ namespace GithubImageLite
 
         public static ConcurrentBag<Models.GitToken> _GitTokens { get; set; }
 
-        public readonly static string ServerToken = "pass";
-        public readonly static string ImageNotFound = "https://raw.githubusercontent.com/ctimggit/storage1/master/404.png";
-        public readonly static decimal  PerRepoLimit =699;
+        public static string ServerToken { get; set; }
+        public static string UploadPath { get; set; }
+
+        public static decimal PerRepoLimit { get; set; }
+
+        public static string ImageNotFound = "https://raw.githubusercontent.com/ctimggit/storage1/master/404.png";
+
         public static bool IsWriting { get; set; }
         protected void Application_Start(object sender, EventArgs e)
         {
             _Role = new No2DB.Base.DRole("GITHUBIMAGELITE");
+
+
+            var settingStr = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "site.configsettings");
+
+            var obj = JsonConvert.DeserializeObject<Models.ServerSetting>(settingStr);
+            PerRepoLimit = obj.LimitMB;
+            UploadPath = obj.UplpadPath;
+            ServerToken = obj.ServerToken;
+
             GetAllGitTokens();
         }
 
@@ -83,7 +97,7 @@ namespace GithubImageLite
             {
                 var tmp = Global._Role.GetQ<Models.GitToken>("TOKENS").AllDatasList();
 
-                tmp = tmp.Where(x => x.UsedMB <= PerRepoLimit).OrderByDescending(x => x.UsedMB).ThenBy(x => x.CreateDate).ToList();
+                tmp = tmp.Where(x => x.UsedMB <= PerRepoLimit).OrderBy(x => x.UsedMB).ThenBy(x=>x.RepoName).ThenBy(x => x.CreateDate).ToList();
                 var t = new ConcurrentBag<Models.GitToken>();
                 foreach (var c in tmp)
                 {
@@ -93,6 +107,46 @@ namespace GithubImageLite
             }
 
             return _GitTokens;
+        }
+
+        public static void ReCountTokenId(string tokeId)
+        {
+            var tokenInfo = Global._Role.GetQ<Models.GitToken>("TOKENS").DataByKey(tokeId);
+
+
+
+            if (tokenInfo == null)
+            {
+                return;
+            }
+
+            decimal count = 0;
+
+            //這 DONMATEST 可以任意都可以
+            var client = new GitHubClient(new ProductHeaderValue("GISL"));
+
+            //從網站上取得的 personal access token https://github.com/settings/tokens 
+            var tokenAuth = new Credentials(tokenInfo.Token);
+
+            client.Credentials = tokenAuth;
+
+            try
+            {
+                var existingFiles = client.Repository.Content.GetAllContentsByRef(tokenInfo.UserName, tokenInfo.RepoName, "imgs", "master").Result;
+                //如果有找到已存在就刪除
+                foreach (var f in existingFiles)
+                {
+                    count += (f.Size / (1024m * 1024m));
+                }
+            }
+            catch
+            {
+
+            }
+
+            tokenInfo.UsedMB = count;
+            Global._Role.GetOp("TOKENS").Update(tokenInfo.Id, tokenInfo);
+
         }
 
 

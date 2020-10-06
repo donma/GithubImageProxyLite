@@ -73,10 +73,15 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admin\clearownerimages.aspx" />
+    <Content Include="admin\cleartokenimages.aspx" />
+    <Content Include="admin\delimagebyid.aspx" />
     <Content Include="admin\imagelist.aspx" />
     <Content Include="admin\create.aspx" />
     <Content Include="admin\getrepos.aspx" />
     <Content Include="admin\images.aspx" />
+    <Content Include="admin\recountalltokensize.aspx" />
+    <Content Include="admin\recounttokenbyid.aspx" />
     <Content Include="admin\tokenlist.aspx" />
     <Content Include="Global.asax" />
     <Content Include="image.aspx" />
@@ -90,12 +95,33 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admin\clearownerimages.aspx.cs">
+      <DependentUpon>clearownerimages.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\clearownerimages.aspx.designer.cs">
+      <DependentUpon>clearownerimages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\cleartokenimages.aspx.cs">
+      <DependentUpon>cleartokenimages.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\cleartokenimages.aspx.designer.cs">
+      <DependentUpon>cleartokenimages.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\create.aspx.cs">
       <DependentUpon>create.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\create.aspx.designer.cs">
       <DependentUpon>create.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\delimagebyid.aspx.cs">
+      <DependentUpon>delimagebyid.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\delimagebyid.aspx.designer.cs">
+      <DependentUpon>delimagebyid.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\getrepos.aspx.cs">
       <DependentUpon>getrepos.aspx</DependentUpon>
@@ -117,6 +143,20 @@
     </Compile>
     <Compile Include="admin\images.aspx.designer.cs">
       <DependentUpon>images.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\recountalltokensize.aspx.cs">
+      <DependentUpon>recountalltokensize.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\recountalltokensize.aspx.designer.cs">
+      <DependentUpon>recountalltokensize.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\recounttokenbyid.aspx.cs">
+      <DependentUpon>recounttokenbyid.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\recounttokenbyid.aspx.designer.cs">
+      <DependentUpon>recounttokenbyid.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\tokenlist.aspx.cs">
       <DependentUpon>tokenlist.aspx</DependentUpon>
@@ -144,6 +184,7 @@
     </Compile>
     <Compile Include="Models\GitToken.cs" />
     <Compile Include="Models\ImageInfo.cs" />
+    <Compile Include="Models\ServerSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="upload.aspx.cs">
       <DependentUpon>upload.aspx</DependentUpon>
@@ -160,6 +201,9 @@
     <None Include="Properties\PublishProfiles\gitproxy1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\gitproxy1 - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\gitproxy1 - Web Deploy.pubxml" />
+    <Content Include="site.configsettings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="clearownerimages.aspx.cs" Async="true" Inherits="GithubImageLite.admin.clearownerimages" %>

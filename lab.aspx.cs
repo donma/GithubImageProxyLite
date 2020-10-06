@@ -18,7 +18,7 @@ namespace GithubImageLite
         }
 
 
-        private string UploadImage(string localpath, string id,string owner, string token = "pass", string url = "")
+        private string UploadImage(string localpath, string id, string owner, string token, string url)
         {
             var src = System.IO.File.ReadAllBytes(localpath);
             Stream stream = new MemoryStream(src);
@@ -33,7 +33,7 @@ namespace GithubImageLite
             {
                 formData.Add(new StringContent(token), "token");
                 formData.Add(new StringContent(owner), "owner");
-                
+
                 if (!string.IsNullOrEmpty(id))
                 {
                     formData.Add(new StringContent(id), "id"); //new add in 2020
@@ -51,13 +51,13 @@ namespace GithubImageLite
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            var res = UploadImage(AppDomain.CurrentDomain.BaseDirectory + "ddd.jpg", "sample", "local");
+            var res = UploadImage(AppDomain.CurrentDomain.BaseDirectory + "ddd.jpg", "sample", "local", Global.ServerToken, Global.UploadPath);
             Response.Write(res);
         }
 
         protected void Button2_Click(object sender, EventArgs e)
         {
-            var res = UploadImage(AppDomain.CurrentDomain.BaseDirectory + "yyy.jpg", "sample", "local");
+            var res = UploadImage(AppDomain.CurrentDomain.BaseDirectory + "yyy.jpg", "sample", "local", Global.ServerToken, Global.UploadPath);
             Response.Write(res);
         }
 
@@ -76,7 +76,7 @@ namespace GithubImageLite
                     try
                     {
                         f.SaveAs(r + f.FileName);
-                        var res = UploadImage(r + f.FileName,"", "local");
+                        var res = UploadImage(r + f.FileName, "", "local", Global.ServerToken, Global.UploadPath);
                         Response.Write(r + f.FileName + ":" + res + "<br>");
                         File.Delete(r + f.FileName);
                     }
