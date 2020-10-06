@@ -27,7 +27,7 @@ namespace GithubImageLite
                 return;
             }
 
-            if (Request["token"] != "zxcasdqwe")
+            if (Request["token"] != Global.ServerToken)
             {
                 Response.Write("error:token error");
                 return;
