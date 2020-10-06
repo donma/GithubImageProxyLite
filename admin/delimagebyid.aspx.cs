@@ -28,22 +28,31 @@ namespace GithubImageLite.admin
                 return;
             }
 
-            var info = Global._Role.GetQ<Models.ImageInfo>("IMAGES").DataByKey(Request["id"]);
+
+            var res=DeleteImageById(Request["id"]);
+
+
+            Response.Write(res);
+            return;
+        }
+
+        public static string DeleteImageById(string imageId)
+        {
+
+
+            var info = Global._Role.GetQ<Models.ImageInfo>("IMAGES").DataByKey(imageId);
             if (info == null)
             {
-                Response.Write("success");
-                return;
+                return "success";
+
             }
 
             var tokenInfo = Global._Role.GetQ<Models.GitToken>("TOKENS").DataByKey(info.TokenId);
 
             if (tokenInfo == null)
             {
-                Response.Write("error:token error");
-                return;
+                return "error:token error";
             }
-
-
 
             //這 DONMATEST 可以任意都可以
             var client = new GitHubClient(new ProductHeaderValue("GISL"));
@@ -59,11 +68,11 @@ namespace GithubImageLite.admin
                 //如果有找到已存在就刪除
                 foreach (var f in existingFiles)
                 {
-                    if (f.Name == Request["id"].ToLower() + ".gif")
+                    if (f.Name == imageId.ToLower() + ".gif")
                     {
-                        client.Repository.Content.DeleteFile(long.Parse(tokenInfo.RepoId), "imgs/" + Request["id"].ToLower() + ".gif", new DeleteFileRequest("delete file", f.Sha)).RunSynchronously();
+                        client.Repository.Content.DeleteFile(long.Parse(tokenInfo.RepoId), "imgs/" + imageId.ToLower() + ".gif", new DeleteFileRequest("delete file", f.Sha)).RunSynchronously();
 
-                        Global._Role.GetOp("IMAGES").Delete(Request["id"].ToLower());
+                        Global._Role.GetOp("IMAGES").Delete(imageId.ToLower());
                         break;
                     }
                 }
@@ -72,9 +81,8 @@ namespace GithubImageLite.admin
             {
 
             }
+            return "success";
 
-            Response.Write("success");
-            return;
         }
     }
 }

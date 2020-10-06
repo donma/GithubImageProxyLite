@@ -76,16 +76,25 @@ namespace GithubImageLite
 
                 }
 
-                var d = Global.GetAllGitTokens().ToList();
+                var imageInfo = Global._Role.GetQ<Models.ImageInfo>("IMAGES").DataByKey(newFilename);
+                if (imageInfo != null)
+                {
 
-                if (d.Count > 0)
+                    admin.delimagebyid.DeleteImageById(newFilename);
+
+                }
+
+                var tokens = Global.GetAllGitTokens().ToList();
+
+
+                if (tokens.Count > 0)
                 {
                     try
                     {
-                        Global.UploadFile(d[0].Token, d[0].UserName, d[0].RepoName, d[0].RepoId, tempPath + newFilename + ".gif", Request["owner"]);
+                        Global.UploadFile(tokens[0].Token, tokens[0].UserName, tokens[0].RepoName, tokens[0].RepoId, tempPath + newFilename + ".gif", Request["owner"]);
                         FileInfo info = new FileInfo(tempPath + newFilename + ".gif");
 
-                        Global.UpdateGitToken(d[0], Convert.ToDecimal(info.Length) / (1024m*1024m));
+                        Global.UpdateGitToken(tokens[0], Convert.ToDecimal(info.Length) / (1024m * 1024m));
 
 
                         Response.Write("success");
@@ -96,22 +105,13 @@ namespace GithubImageLite
                     }
                     finally
                     {
-                        //File.Delete(tempPath + newFilename + ".gif");
 
-                        //        Task task = Task.Delay(10000)
-                        //.ContinueWith(t => {
-
-                        //    File.Delete(tempPath + newFilename + ".gif");
-                        //});
-
-                        //        task.Wait();
                         var t = Task.Run(() =>
                         {
                             Thread.Sleep(10000);
                             File.Delete(tempPath + newFilename + ".gif");
                         });
 
-                     //   t.Start();
                     }
                 }
 

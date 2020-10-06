@@ -97,7 +97,7 @@ namespace GithubImageLite
             {
                 var tmp = Global._Role.GetQ<Models.GitToken>("TOKENS").AllDatasList();
 
-                tmp = tmp.Where(x => x.UsedMB <= PerRepoLimit).OrderBy(x => x.UsedMB).ThenBy(x=>x.RepoName).ThenBy(x => x.CreateDate).ToList();
+                tmp = tmp.Where(x => x.UsedMB <= PerRepoLimit).OrderBy(x => x.UsedMB).ThenBy(x => x.RepoName).ThenBy(x => x.CreateDate).ToList();
                 var t = new ConcurrentBag<Models.GitToken>();
                 foreach (var c in tmp)
                 {
@@ -133,27 +133,34 @@ namespace GithubImageLite
             try
             {
                 var existingFiles = client.Repository.Content.GetAllContentsByRef(tokenInfo.UserName, tokenInfo.RepoName, "imgs", "master").Result;
-                //如果有找到已存在就刪除
-                foreach (var f in existingFiles)
+
+                if (existingFiles.Count > 0)
                 {
-                    count += (f.Size / (1024m * 1024m));
+                    foreach (var f in existingFiles)
+                    {
+                        count += (f.Size / (1024m * 1024m));
+                    }
                 }
+
             }
             catch
             {
 
             }
-
             tokenInfo.UsedMB = count;
             Global._Role.GetOp("TOKENS").Update(tokenInfo.Id, tokenInfo);
+
 
         }
 
 
         //a16e3baf8fa8784dc45ec4f49a9856c239992818
         //
-        public async static void UploadFile(string token, string userName, string reponame, string repoId, string localPath, string ownerId)
+        public  static void UploadFile(string token, string userName, string reponame, string repoId, string localPath, string ownerId)
         {
+
+
+
             //這 DONMATEST 可以任意都可以
             var client = new GitHubClient(new ProductHeaderValue("GISL"));
 
@@ -162,23 +169,23 @@ namespace GithubImageLite
 
             client.Credentials = tokenAuth;
 
-            try
-            {
-                var existingFiles = client.Repository.Content.GetAllContentsByRef(userName, reponame, "imgs", "master").Result;
-                //如果有找到已存在就刪除
-                foreach (var f in existingFiles)
-                {
-                    if (f.Name == Path.GetFileName(localPath))
-                    {
-                        await client.Repository.Content.DeleteFile(long.Parse(repoId), "imgs/" + Path.GetFileName(localPath), new DeleteFileRequest("delete file", f.Sha));
-                        break;
-                    }
-                }
-            }
-            catch
-            {
+            //try
+            //{
+            //    var existingFiles = client.Repository.Content.GetAllContentsByRef(userName, reponame, "imgs", "master").Result;
+            //    //如果有找到已存在就刪除
+            //    foreach (var f in existingFiles)
+            //    {
+            //        if (f.Name == Path.GetFileName(localPath))
+            //        {
+            //            await client.Repository.Content.DeleteFile(long.Parse(repoId), "imgs/" + Path.GetFileName(localPath), new DeleteFileRequest("delete file", f.Sha));
+            //            break;
+            //        }
+            //    }
+            //}
+            //catch
+            //{
 
-            }
+            //}
 
 
             //最後一個參數是否要轉成 base64

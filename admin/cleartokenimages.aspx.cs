@@ -11,7 +11,7 @@ namespace GithubImageLite.admin
 {
     public partial class cleartokenimages : System.Web.UI.Page
     {
-        protected async  void Page_Load(object sender, EventArgs e)
+        protected async void Page_Load(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Request["id"]))
             {
@@ -47,23 +47,30 @@ namespace GithubImageLite.admin
 
             client.Credentials = tokenAuth;
 
-
-            var existingFiles = client.Repository.Content.GetAllContentsByRef(tokenInfo.UserName, tokenInfo.RepoName, "imgs", "master").Result;
-            //如果有找到已存在就刪除
-            foreach (var f in existingFiles)
+            var delQ = Global._Role.GetOp("IMAGES");
+            try
             {
-                try
+                var existingFiles = client.Repository.Content.GetAllContentsByRef(tokenInfo.UserName, tokenInfo.RepoName, "imgs", "master").Result;
+                //如果有找到已存在就刪除
+                foreach (var f in existingFiles)
                 {
+                    try
+                    {
 
-                    await client.Repository.Content.DeleteFile(long.Parse(tokenInfo.RepoId), "imgs/" + f.Name, new DeleteFileRequest("delete file", f.Sha));
+                        await client.Repository.Content.DeleteFile(long.Parse(tokenInfo.RepoId), "imgs/" + f.Name, new DeleteFileRequest("delete file", f.Sha));
+                        delQ.Delete(f.Name.Replace(".gif", ""));
 
+                        Thread.Sleep(400);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
 
-                    Thread.Sleep(400);
                 }
-                catch
-                {
-                    continue;
-                }
+            }
+            catch
+            {
 
             }
 
