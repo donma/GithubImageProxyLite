@@ -1,0 +1,5 @@
+{
+  "ServerToken": "pass",
+  "UplpadPath": "https://localhost:44363/upload.aspx",
+  "LimitMB": 699
+}
