@@ -29,14 +29,16 @@ namespace GithubImageLite.admin
             }
 
             var info = Global._Role.GetQ<Models.ImageInfo>("IMAGES").DataByKey(Request["id"]);
-            if (info == null) {
+            if (info == null)
+            {
                 Response.Write("success");
                 return;
             }
 
             var tokenInfo = Global._Role.GetQ<Models.GitToken>("TOKENS").DataByKey(info.TokenId);
 
-            if (tokenInfo == null) {
+            if (tokenInfo == null)
+            {
                 Response.Write("error:token error");
                 return;
             }
@@ -57,9 +59,11 @@ namespace GithubImageLite.admin
                 //如果有找到已存在就刪除
                 foreach (var f in existingFiles)
                 {
-                    if (f.Name == Request["id"].ToLower()+".gif")
+                    if (f.Name == Request["id"].ToLower() + ".gif")
                     {
-                         client.Repository.Content.DeleteFile(long.Parse(tokenInfo.RepoId), "imgs/" + Request["id"].ToLower() + ".gif", new DeleteFileRequest("delete file", f.Sha)).RunSynchronously();
+                        client.Repository.Content.DeleteFile(long.Parse(tokenInfo.RepoId), "imgs/" + Request["id"].ToLower() + ".gif", new DeleteFileRequest("delete file", f.Sha)).RunSynchronously();
+
+                        Global._Role.GetOp("IMAGES").Delete(Request["id"].ToLower());
                         break;
                     }
                 }
